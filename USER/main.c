@@ -1,27 +1,8 @@
-//              ----------------------------------------------------------------
-//              ADC1 通道：ch0(PA0) ch1(PA1)
-//                        
-//              USART1: PA9(USART1_TX) PA10(USART1_RX)
-//              
-//              OLED接线说明: 
-//              ----------------------------------------------------------------
-//              GND  电源地
-//              VCC  接5V或3.3v电源
-//              SCL  接PA4（D0）
-//              SDA  接PA5（D1）
-//              RES  接PA6
-//              DC   接PA7
-//							
-//              ----------------------------------------------------------------
-	              
-
-
 #include "stm32f10x.h"
 #include "usart.h"
 #include "oled.h"
 #include "delay.h"
 #include "adc.h"
-
 
  u16 adc0,  adc1;
 extern unsigned char usart1Buf[9];
@@ -38,6 +19,7 @@ void hard_init()
 		Usart2_Init(9600);
 		Usart3_Init(9600);
 }
+
  int main(void)
  {		
 	 //电流计算量

@@ -1,29 +1,10 @@
-
-
-//硬件驱动
 #include "usart.h"
 #include "delay.h"
-
-//C库
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
 
-
-/*
-************************************************************
-*	函数名称：	Usart1_Init
-*
-*	函数功能：	串口1初始化
-*
-*	入口参数：	baud：设定的波特率
-*
-*	返回参数：	无
-*
-*	说明：		TX-PA9		RX-PA10
-************************************************************
-*/
-void Usart1_Init(unsigned int baud)
+void Usart1_Init(u32 baud)
 {
 
 	GPIO_InitTypeDef gpio_initstruct;
@@ -66,21 +47,7 @@ void Usart1_Init(unsigned int baud)
 }
 
 
-/*
-************************************************************
-*	函数名称：	Usart2_Init
-*
-*	函数功能：	串口2初始化
-*
-*	入口参数：	baud：设定的波特率
-*
-*	返回参数：	无
-*
-*	说明：		TX-PA2		RX-PA3
-************************************************************
-*/
-
-void Usart2_Init(unsigned int baud)
+void Usart2_Init(u32 baud)
 {
 
 	GPIO_InitTypeDef gpio_initstruct;
@@ -119,24 +86,10 @@ void Usart2_Init(unsigned int baud)
 	nvic_initstruct.NVIC_IRQChannelPreemptionPriority = 0;
 	nvic_initstruct.NVIC_IRQChannelSubPriority = 2;
 	NVIC_Init(&nvic_initstruct);
-
 }
 
-/*
-************************************************************
-*	函数名称：	Usart2_Init
-*
-*	函数功能：	串口2初始化
-*
-*	入口参数：	baud：设定的波特率
-*
-*	返回参数：	无
-*
-*	说明：		TX-PB10		RX-PB11
-************************************************************
-*/
 
-void Usart3_Init(unsigned int baud)
+void Usart3_Init(u32 baud)
 {
 
 	GPIO_InitTypeDef gpio_initstruct;
@@ -178,25 +131,11 @@ void Usart3_Init(unsigned int baud)
 
 }
 
-/*
-************************************************************
-*	函数名称：	Usart_SendString
-*
-*	函数功能：	串口数据发送
-*
-*	入口参数：	USARTx：串口组
-*				str：要发送的数据
-*				len：数据长度
-*
-*	返回参数：	无
-*
-*	说明：		
-************************************************************
-*/
-void Usart_SendString(USART_TypeDef *USARTx, unsigned char *str, unsigned short len)
+//发送字符串
+void Usart_SendString(USART_TypeDef *USARTx, u8 *str, u16 len)
 {
 
-	unsigned short count = 0;
+	u16 count = 0;
 	
 	for(; count < len; count++)
 	{
@@ -206,26 +145,13 @@ void Usart_SendString(USART_TypeDef *USARTx, unsigned char *str, unsigned short 
 
 }
 
-/*
-************************************************************
-*	函数名称：	UsartPrintf
-*
-*	函数功能：	格式化打印
-*
-*	入口参数：	USARTx：串口组
-*				fmt：不定长参
-*
-*	返回参数：	无
-*
-*	说明：		
-************************************************************
-*/
+//可变长参数格式化打印输出
 void UsartPrintf(USART_TypeDef *USARTx, char *fmt,...)
 {
 
-	unsigned char UsartPrintfBuf[296];
+	u8 UsartPrintfBuf[296];
 	va_list ap;
-	unsigned char *pStr = UsartPrintfBuf;
+	u8 *pStr = UsartPrintfBuf;
 	
 	va_start(ap, fmt);
 	vsprintf((char *)UsartPrintfBuf, fmt, ap);							//格式化
@@ -239,44 +165,10 @@ void UsartPrintf(USART_TypeDef *USARTx, char *fmt,...)
 
 }
 
-/****************
-函数名称：	SendInstr
-
-函数功能：   给电磁继电器发送指令
-
-入口参数：   数组名，数组长度
 
 
-说明： 发送十六进制数据
-****************/
-void SendInstr(u8 *pucStr, u8 ulNum) 
-{ 
-u8 i; 
-for(i = 0;i<ulNum;i++) 
-{ 
-    USART_SendData(USART2,*pucStr++); 
-    while(USART_GetFlagStatus(USART2,USART_FLAG_TC)==RESET);   
-}  
-} 
-
-
-
-unsigned short usart1Len;
-unsigned char usart1Buf[9];
-
-/*
-************************************************************
-*	函数名称：	USART1_IRQHandler
-*
-*	函数功能：	串口1收发中断
-*
-*	入口参数：	无
-*
-*	返回参数：	无
-*
-*	说明：		
-************************************************************
-*/
+u16 usart1Len;
+u8 usart1Buf[9];
 void USART1_IRQHandler(void)
 {
 
@@ -292,9 +184,8 @@ void USART1_IRQHandler(void)
 }
 
 
-unsigned short usart2Len;
-unsigned char usart2Buf[9];
-/********************************************/
+u16 usart2Len;
+u8 usart2Buf[9];
 void USART2_IRQHandler(void)
 {
 
@@ -310,7 +201,8 @@ void USART2_IRQHandler(void)
 
 }
 
-
+u16 usart3Len;
+u8 usart3Buf[9];
 void USART3_IRQHandler(void)
 {
 

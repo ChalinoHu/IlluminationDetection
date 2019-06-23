@@ -1,7 +1,5 @@
  #include "adc.h"
  #include "delay.h"
-	
-#define N 11       //滤波转换次数，可自行修改
 
 //初始化ADC
 //这里我们仅以规则通道为例
@@ -82,8 +80,8 @@ u16 Get_Adc_Average(u8 ch,u8 times)
 } 	 
 
 
-//中值滤波
-u16 Filter(u8 ch)
+//十次中值滤波
+u16 get_filter_value(u8 ch)
 {
   u16 Array[10],temp;
     int i=0,j;
@@ -92,9 +90,9 @@ u16 Filter(u8 ch)
         Array[i++] = Get_Adc(ch);
     }
     
-    for( i=0;i<N-1;i++)
+    for( i=0;i<10;i++)
     {
-        for( j=i+1;j<N;j++)
+        for( j=i+1;j<10;j++)
         {
             if(Array[i]>Array[j] )
             {
@@ -104,7 +102,7 @@ u16 Filter(u8 ch)
         }
     }
     
-    return Array[(N-1)/2];
+    return Array[5];
 }
 
 
